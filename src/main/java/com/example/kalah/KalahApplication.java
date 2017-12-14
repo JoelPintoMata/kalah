@@ -1,6 +1,6 @@
 package com.example.kalah;
 
-import com.example.kalah.model.KalahBoard;
+import com.example.kalah.gameboard.KalahBoard;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -12,6 +12,6 @@ public class KalahApplication {
         ApplicationContext ctx = SpringApplication.run(KalahApplication.class, args);
 
 //        start the bux bot runner
-        ((KalahBoard) ctx.getBean("kalahBoardImpl")).generate(6);
+        ((KalahBoard) ctx.getBean("kalahBoardImpl")).setup(6, null);
 	}
 }
