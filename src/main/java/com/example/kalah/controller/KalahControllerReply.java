@@ -15,6 +15,8 @@ public class KalahControllerReply {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    private String message;
+
     private List<Integer> gameBoard;
 
     /**
@@ -30,6 +32,7 @@ public class KalahControllerReply {
      * @param message the message to return
      */
     public KalahControllerReply(String message) {
+        this.message = message;
     }
 
     /**

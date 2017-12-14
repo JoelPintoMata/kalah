@@ -56,7 +56,7 @@ public class KalahController {
         try {
             gameBoard = kalahBoard.play(playerId, position);
         } catch (KalahBoardException e) {
-            preConditionFailed(e.getMessage());
+            return preConditionFailed(e.getMessage());
         }
         return accepted(gameBoard);
     }
@@ -86,6 +86,6 @@ public class KalahController {
      */
     private ResponseEntity<String> preConditionFailed(String message) {
         KalahControllerReply kalahControllerReply = new KalahControllerReply(message);
-        return new ResponseEntity<>(kalahControllerReply.toJson(), HttpStatus.PRECONDITION_FAILED);
+        return new ResponseEntity(kalahControllerReply.toJson(), HttpStatus.PRECONDITION_FAILED);
     }
 }

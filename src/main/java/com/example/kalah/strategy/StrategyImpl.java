@@ -11,7 +11,6 @@ public class StrategyImpl implements Strategy {
 
     @Override
     public List<Integer> play(List<Integer> board, int playerId, int position) {
-        position = playerId * position;
         int numberOfStones = board.get(position);
         board.set(position, 0);
 
@@ -24,17 +23,29 @@ public class StrategyImpl implements Strategy {
             if(numberOfStones == 0)
 //                no more stones to play
                 break;
-            for(int i=positionAux; i<board.size(); i++){
-                board.set(positionAux, board.get(i) + 1);
-                if(--numberOfStones == 0)
-//                no more stones to play
+            for(int i=positionAux; i<board.size(); i++) {
+//                can the player use this house?
+                if (isHouseValid(playerId, positionAux)) {
+                    board.set(positionAux, board.get(i) + 1);
+                    if (--numberOfStones == 0)
+//                    no more stones to play
                     return board;
+                }
                 positionAux++;
             }
 
         } while (true);
 
         return board;
+    }
+
+    /**
+     * Check if this player can play on this house
+     * @param playerId the player id
+     * @param positionAux
+     * @return
+     */
+    private boolean isHouseValid(int playerId, int positionAux) {
     }
 
     /**
