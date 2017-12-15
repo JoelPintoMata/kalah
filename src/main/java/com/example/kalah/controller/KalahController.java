@@ -2,6 +2,7 @@ package com.example.kalah.controller;
 
 import com.example.kalah.gameboard.KalahBoard;
 import com.example.kalah.gameboard.KalahBoardException;
+import com.example.kalah.model.player.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class KalahController {
             @PathVariable("level") int level,
             Map<String, Object> model) {
         List<Integer> gameBoard = kalahBoard.setup(level, null);
-        return accepted(gameBoard);
+        return accepted(gameBoard, null);
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/setup/level/{level}/strategy/{strategy}")
@@ -44,7 +45,7 @@ public class KalahController {
             @PathVariable("strategy") String strategy,
             Map<String, Object> model) {
         List<Integer> gameBoard = kalahBoard.setup(level, strategy);
-        return accepted(gameBoard);
+        return accepted(gameBoard, null);
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/play/player/{playerId}/position/{position}")
@@ -53,12 +54,14 @@ public class KalahController {
             @PathVariable("position") int position,
             Map<String, Object> model) {
         List<Integer> gameBoard = null;
+        Player winner;
         try {
             gameBoard = kalahBoard.play(playerId, position);
+            winner = kalahBoard.getWinner();
         } catch (KalahBoardException e) {
             return preConditionFailed(e.getMessage());
         }
-        return accepted(gameBoard);
+        return accepted(gameBoard, winner);
     }
 
     /**
@@ -73,9 +76,10 @@ public class KalahController {
      *
      * @return
      * @param gameBoard
+     * @param winner
      */
-    private ResponseEntity accepted(List<Integer> gameBoard) {
-        KalahControllerReply kalahControllerReply = new KalahControllerReply(gameBoard);
+    private ResponseEntity accepted(List<Integer> gameBoard, Player winner) {
+        KalahControllerReply kalahControllerReply = new KalahControllerReply(gameBoard, winner);
         return new ResponseEntity(kalahControllerReply.toJson(), HttpStatus.ACCEPTED);
     }
 

@@ -1,5 +1,8 @@
 package com.example.kalah.strategy;
 
+import com.example.kalah.gameboard.KalahBoardException;
+import com.example.kalah.model.player.Player;
+
 import java.util.List;
 
 public interface Strategy {
@@ -12,5 +15,7 @@ public interface Strategy {
      * @param playerId the player id
      * @param position the start position
      */
-    List play(List<Integer> board, int playerId, int position);
+    List play(List<Integer> board, Player playerId, int position) throws KalahBoardException;
+
+    Player getWinner();
 }

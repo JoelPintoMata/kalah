@@ -1,5 +1,7 @@
 package com.example.kalah.gameboard;
 
+import com.example.kalah.model.player.Player;
+
 import java.util.List;
 
 /**
@@ -30,8 +32,8 @@ public interface KalahBoard {
     List<Integer> play(int playerId, int position) throws KalahBoardException;
 
 	/**
-	 * Checks if the game was won
-	 * @return
+	 * Checks if the game is won
+	 * @return the winning player
 	 */
-	boolean isGameWon();
+	Player getWinner();
 }

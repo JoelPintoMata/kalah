@@ -1,10 +1,17 @@
 package com.example.kalah.model.player;
 
-public interface Player {
+import lombok.Getter;
+import lombok.Setter;
 
-    /**
-     * Sets the player id
-     * @param i
-     */
-    void setId(int i);
+public class Player {
+
+    @Setter@Getter
+    private int id;
+
+    @Getter
+    private int seedsCaptured;
+
+    public void incSeedsCaptured(){
+        this.seedsCaptured++;
+    }
 }

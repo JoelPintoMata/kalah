@@ -1,9 +1,9 @@
 package com.example.kalah.gameboard;
 
 import com.example.kalah.model.player.Player;
-import com.example.kalah.model.player.PlayerImpl;
 import com.example.kalah.strategy.Strategy;
 import com.example.kalah.strategy.StrategyImpl;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,8 +19,13 @@ public class KalahBoardImpl implements KalahBoard {
 //    the board game
     private List<Integer> board;
 
+    @Setter
+    private int level;
+
     @Override
     public List<Integer> setup(int level, String strategy) {
+        this.level = level;
+
         board = new LinkedList<>();
         for(int i=0; i<level*2; i++) {
             board.add(4);
@@ -35,45 +40,30 @@ public class KalahBoardImpl implements KalahBoard {
     }
 
     @Override
-    public String isValid(int lposition) {
+    public String isValid(int position) {
         return null;
     }
 
     @Override
     public List<Integer> play(int playerId, int position) throws KalahBoardException {
-        validate(board, playerId, position);
-        return strategy.play(board, playerId, position);
-    }
-
-    /**
-     * Validates this play parameters
-     * @param board
-     * @param playerId
-     * @param position start position
-     */
-    private void validate(List board, int playerId, int position) throws KalahBoardException {
-        if(playerId == 1)
-            if(position > board.size()/2)
-                throw new KalahBoardException("The player can only play on his side of the board");
-        if(playerId == 2)
-            if(position < board.size()/2)
-                throw new KalahBoardException("The player can only play on his side of the board");
+//        players list is zero based
+        return strategy.play(board, playerList.get(playerId-1), position);
     }
 
     @Override
-    public boolean isGameWon() {
-        return false;
+    public Player getWinner() {
+        return this.strategy.getWinner();
     }
 
     /**
      * Sets this game players
      */
     private void setPlayers() {
-        Player player = new PlayerImpl();
+        Player player = new Player();
         player.setId(1);
         playerList.add(player);
 
-        player = new PlayerImpl();
+        player = new Player();
         player.setId(2);
         playerList.add(player);
     }
