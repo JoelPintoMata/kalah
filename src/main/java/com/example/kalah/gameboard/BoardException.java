@@ -1,12 +1,12 @@
 package com.example.kalah.gameboard;
 
-public class KalahBoardException extends Throwable {
+public class BoardException extends Throwable {
 
     /**
      *
      * @param message the exception message
      */
-    public KalahBoardException(String message) {
+    public BoardException(String message) {
         super(message);
     }
 }

@@ -1,7 +1,9 @@
 package com.example.kalah.controller;
 
-import com.example.kalah.gameboard.KalahBoard;
-import com.example.kalah.gameboard.KalahBoardException;
+import com.example.kalah.gameboard.BoardException;
+import com.example.kalah.gameboard.House;
+import com.example.kalah.gameboard.Kalah;
+import com.example.kalah.gameboard.Board;
 import com.example.kalah.model.player.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +21,10 @@ import java.util.Map;
 public class KalahController {
 
     @Autowired
-    private KalahBoard kalahBoard;
+    private Kalah kalah;
+
+    @Autowired
+    private Board board;
 
 	// inject via application.properties
 	@Value("${welcome.message:test}")
@@ -35,8 +40,12 @@ public class KalahController {
     public ResponseEntity setupDefaultStrategy(
             @PathVariable("level") int level,
             Map<String, Object> model) {
-        List<Integer> gameBoard = kalahBoard.setup(level, null);
-        return accepted(gameBoard, null);
+        kalah.setup(level, null);
+
+        List<House> gameBoard = kalah.getBoard();
+        Player firstPlayer = kalah.getFirstPlayer();
+
+        return accepted(gameBoard, firstPlayer, null);
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/setup/level/{level}/strategy/{strategy}")
@@ -44,32 +53,36 @@ public class KalahController {
             @PathVariable("level") int level,
             @PathVariable("strategy") String strategy,
             Map<String, Object> model) {
-        List<Integer> gameBoard = kalahBoard.setup(level, strategy);
-        return accepted(gameBoard, null);
+        kalah.setup(level, strategy);
+
+        List<House> gameBoard = kalah.getBoard();
+        Player firstPlayer = kalah.getFirstPlayer();
+
+        return accepted(gameBoard, firstPlayer, null);
     }
 
     @RequestMapping(method = RequestMethod.GET, path="/play/player/{playerId}/position/{position}")
-    public ResponseEntity play(
+    public ResponseEntity<String> play(
             @PathVariable("playerId") int playerId,
             @PathVariable("position") int position,
             Map<String, Object> model) {
-        List<Integer> gameBoard = null;
-        Player winner;
-        try {
-            gameBoard = kalahBoard.play(playerId, position);
-            winner = kalahBoard.getWinner();
-        } catch (KalahBoardException e) {
-            return preConditionFailed(e.getMessage());
-        }
-        return accepted(gameBoard, winner);
-    }
 
-    /**
-     *
-     * @return
-     */
-    private ResponseEntity<String> accepted() {
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+        try {
+            kalah.play(playerId, position);
+        } catch (BoardException e) {
+
+            List<House> gameBoard = kalah.getBoard();
+            Player nextPlayer = kalah.getNextPlayer();
+            Player winner = kalah.getWinner();
+
+            return preConditionFailed(e.getMessage(), gameBoard, nextPlayer, winner);
+        }
+
+        List<House> gameBoard = kalah.getBoard();
+        Player nextPlayer = kalah.getNextPlayer();
+        Player winner = kalah.getWinner();
+
+        return accepted(gameBoard, nextPlayer, winner);
     }
 
     /**
@@ -78,18 +91,19 @@ public class KalahController {
      * @param gameBoard
      * @param winner
      */
-    private ResponseEntity accepted(List<Integer> gameBoard, Player winner) {
-        KalahControllerReply kalahControllerReply = new KalahControllerReply(gameBoard, winner);
+    private ResponseEntity accepted(List<House> gameBoard, Player nextPlayer, Player winner) {
+        KalahControllerReply kalahControllerReply = new KalahControllerReply(gameBoard, nextPlayer, winner);
         return new ResponseEntity(kalahControllerReply.toJson(), HttpStatus.ACCEPTED);
     }
 
     /**
      * Handles an pre-conditions entity (412) error code
      * @param message
+     * @param gameBoard
      * @return Response entity containing a 412 error code
      */
-    private ResponseEntity<String> preConditionFailed(String message) {
-        KalahControllerReply kalahControllerReply = new KalahControllerReply(message);
+    private ResponseEntity<String> preConditionFailed(String message, List<House> gameBoard, Player nextPlayer, Player winner) {
+        KalahControllerReply kalahControllerReply = new KalahControllerReply(message, gameBoard, nextPlayer, winner);
         return new ResponseEntity(kalahControllerReply.toJson(), HttpStatus.PRECONDITION_FAILED);
     }
 }

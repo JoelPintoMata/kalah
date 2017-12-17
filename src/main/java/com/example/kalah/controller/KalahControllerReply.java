@@ -1,8 +1,8 @@
 package com.example.kalah.controller;
 
+import com.example.kalah.gameboard.House;
 import com.example.kalah.model.player.Player;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Data;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,32 +17,38 @@ public class KalahControllerReply {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     @Getter
-    private String message;
+    private List<House> gameBoard;
+
+    @Getter
+    private Player nextPlayer;
 
     @Getter
     private Player winner;
 
     @Getter
-    private List<Integer> gameBoard;
+    private String message;
 
     /**
-     *
-     * @param message the message to return
-     */
-    public KalahControllerReply(String message) {
-        this.message = message;
-    }
-
-    /**
-     *
      * @param gameBoard
+     * @param nextPlayer
+     * @param winner
      */
-    public KalahControllerReply(List<Integer> gameBoard) {
+    public KalahControllerReply(List<House> gameBoard, Player nextPlayer, Player winner) {
         this.gameBoard = gameBoard;
+        this.nextPlayer = nextPlayer;
+        this.winner = winner;
     }
 
-    public KalahControllerReply(List<Integer> gameBoard, Player winner) {
+    /**
+     *  @param message
+     * @param gameBoard
+     * @param nextPlayer
+     * @param winner
+     */
+    public KalahControllerReply(String message, List<House> gameBoard, Player nextPlayer, Player winner) {
+        this.message = message;
         this.gameBoard = gameBoard;
+        this.nextPlayer = nextPlayer;
         this.winner = winner;
     }
 
