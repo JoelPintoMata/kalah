@@ -1,8 +1,11 @@
-package com.example.kalah.gameboard;
+package com.example.kalah.board;
 
 
+import com.example.kalah.model.board.BoardException;
+import com.example.kalah.model.board.House;
 import com.example.kalah.model.player.Player;
 import com.example.kalah.strategy.Strategy;
+import com.example.kalah.strategy.StrategyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +28,8 @@ public class Kalah {
         strategy.setup(level);
     }
 
-    public List<House> getBoard() {
-        return strategy.getBoard();
+    public List<House> getBoardHouses() {
+        return strategy.getBoardHouses();
     }
 
     public Player getNextPlayer() {

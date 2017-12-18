@@ -1,8 +1,8 @@
 package com.example.kalah.strategy;
 
-import com.example.kalah.gameboard.KalahBoard;
-import com.example.kalah.gameboard.KalahBoardException;
-import com.example.kalah.gameboard.KalahBoardImpl;
+import com.example.kalah.board.KalahBoard;
+import com.example.kalah.board.KalahBoardException;
+import com.example.kalah.board.KalahBoardImpl;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

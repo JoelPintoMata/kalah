@@ -1,6 +1,5 @@
-package com.example.kalah.gameboard;
+package com.example.kalah.strategy;
 
-import com.example.kalah.strategy.Strategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

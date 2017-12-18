@@ -1,9 +1,9 @@
 package com.example.kalah.strategy;
 
-import com.example.kalah.gameboard.House;
-import com.example.kalah.gameboard.HouseType;
-import com.example.kalah.gameboard.Board;
-import com.example.kalah.gameboard.BoardException;
+import com.example.kalah.model.board.Board;
+import com.example.kalah.model.board.BoardException;
+import com.example.kalah.model.board.House;
+import com.example.kalah.model.board.HouseType;
 import com.example.kalah.model.player.Player;
 import com.example.kalah.model.player.Players;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Concrete implementation of a kalah strategy
+ * This implementation follows the default rules at [Kalah default rules](https://en.wikipedia.org/wiki/Kalah)
+ */
 @Component
 public class StrategyImpl implements Strategy {
 
@@ -20,6 +24,7 @@ public class StrategyImpl implements Strategy {
     @Autowired
     private Players players;
 
+//    the number of initial seeds per player
     private static final int SEEDS_PER_PLAYER = 4;
 
     private boolean gameWon = false;
@@ -29,19 +34,13 @@ public class StrategyImpl implements Strategy {
 
     @Override
     public void setup(int level) {
-        board.setupBoard(level, SEEDS_PER_PLAYER);
+        board.setup(level, SEEDS_PER_PLAYER);
         nextPlayer = players.getPlayerOne();
     }
 
     @Override
-    public List<House> getBoard() {
+    public List<House> getBoardHouses() {
         return board.getHouses();
-    }
-
-    @Override
-    public Player getFirstPlayer() {
-//        default rule
-        return getBoard().get(0).getPlayer();
     }
 
     @Override
@@ -53,11 +52,6 @@ public class StrategyImpl implements Strategy {
         isPlayValid(player, position);
 
         playAux(player, position);
-    }
-
-    @Override
-    public Player getWinner() {
-        return null;
     }
 
     /**
@@ -109,18 +103,29 @@ public class StrategyImpl implements Strategy {
         } while (true);
     }
 
-    /**
-     *  @param board
-     * @param positionAux
-     */
-    private void captureCurrentAndOponentSeeds(Board board, int positionAux) {
-        Player player = board.getHouses().get(positionAux).getPlayer();
-        board.setCapturedSeeds(player, 1 + board.getOpponentSeeds(positionAux));
+    @Override
+    public Player getFirstPlayer() {
+//        default rule
+        return getBoardHouses().get(0).getPlayer();
     }
 
     @Override
     public Player getNextPlayer() {
         return this.nextPlayer;
+    }
+
+    @Override
+    public Player getWinner() {
+        return this.winner;
+    }
+
+    /**
+     * @param board
+     * @param positionAux
+     */
+    private void captureCurrentAndOponentSeeds(Board board, int positionAux) {
+        Player player = board.getHouses().get(positionAux).getPlayer();
+        board.setCapturedSeeds(player, 1 + board.getOpponentSeeds(positionAux));
     }
 
     /**
@@ -140,24 +145,6 @@ public class StrategyImpl implements Strategy {
 
         if(board.get(position).getHouseType().equals(HouseType.STORE))
             throw new BoardException("The player stores cannot be chose");
-    }
-
-    /**
-     * Check if this player can play on this house
-     * @param board the game board
-     * @param player the player
-     * @param position the current position
-     * @return a boolean indicating if the player can play in this house
-     */
-    private boolean isHouseValid(List board, Player player, int position) {
-        boolean result = true;
-        if(player.getId() == 1)
-            if(position == board.size()/2 - 1)
-                result = false;
-        if(player.getId() == 2)
-            if(position == board.size() - 1)
-                result = false;
-        return result;
     }
 
     /**

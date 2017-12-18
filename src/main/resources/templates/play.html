@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Boot Thymeleaf Hello World Example</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" th:href="@{/css/main.css}"
+          href="../../css/main.css" />
+
+</head>
+<body>
+    <div class="container">
+        <div class="starter-template">
+            <h1>Kalah</h1>
+            <h2>
+                <span th:if="${message != null}" th:text="'Message: ' + ${message}"></span>
+            </h2>
+            <h2>
+                <span th:if="${winner != null}" th:text="'Winner: ' + ${winner.id} + ' (' + ${winner.seedsCaptured} + ' seeds captured)'"></span>
+            </h2>
+            <h3>
+                <span th:if="${winner == null}" th:text="'Next player: ' + ${player.id} + ' (' + ${player.seedsCaptured} + ' seeds captured)'"></span>
+            </h3>
+            <table>
+                <tr>
+                    <span th:each="house,iterStat : ${boardHouses}" th:if="${iterStat.index lt #lists.size(boardHouses)/2}">
+                        <td>
+                            <a th:if="${#strings.toString(house.houseType)} == 'HOUSE'" th:href="@{/play/player/{player}/position/{id}(id=${iterStat.index}, player=${house.player.id})}">Play</a>
+                        </td>
+                    </span>
+                </tr>
+                <tr>
+                    <span th:each="house,iterStat : ${boardHouses}" th:if="${iterStat.index lt #lists.size(boardHouses)/2}">
+                        <td>
+                            <p th:text="${house.seeds}"></p>
+                        </td>
+                    </span>
+                </tr>
+                <tr>
+                    <span>
+                        <td>
+                            <LABEL>Store</LABEL>
+                        </td>
+                        <td th:each="house,iterStat : ${boardHouses}" th:if="${iterStat.index lt #lists.size(boardHouses)/2-1   }">
+                            <LABEL>House</LABEL>
+                        </td>
+                    </span>
+                </tr>
+                <tr>
+                    <span th:each="house,iterStat : ${boardHouses}" th:if="${iterStat.index gt #lists.size(boardHouses)/2-1}">
+                        <td>
+                            <p th:text="${house.seeds}"></p>
+                        </td>
+                    </span>
+                </tr>
+                <tr>
+                    <span th:each="house,iterStat : ${boardHouses}" th:if="${iterStat.index gt #lists.size(boardHouses)/2-1}">
+                        <td>
+                            <a th:if="${#strings.toString(house.houseType)} == 'HOUSE'" th:href="@{/play/player/{player}/position/{id}(id=${iterStat.index}, player=${house.player.id})}">Play</a>
+                        </td>
+                    </span>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

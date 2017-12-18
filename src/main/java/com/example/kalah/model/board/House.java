@@ -1,5 +1,6 @@
-package com.example.kalah.gameboard;
+package com.example.kalah.model.board;
 
+import com.example.kalah.board.HouseType;
 import com.example.kalah.model.player.Player;
 
 public class House {

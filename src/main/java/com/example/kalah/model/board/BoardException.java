@@ -1,4 +1,4 @@
-package com.example.kalah.gameboard;
+package com.example.kalah.model.board;
 
 public class BoardException extends Throwable {
 

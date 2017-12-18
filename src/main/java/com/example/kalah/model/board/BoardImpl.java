@@ -1,4 +1,4 @@
-package com.example.kalah.gameboard;
+package com.example.kalah.model.board;
 
 import com.example.kalah.model.player.Player;
 import com.example.kalah.model.player.Players;
@@ -18,25 +18,27 @@ public class BoardImpl implements Board {
     private Players players;
 
     private List<House> houses;
+
     private int level;
 
     @Override
-    public void setupBoard(int level, int seedsPerPlayer) {
+    public void setup(int level, int seedsPerPlayer) {
         this.level = level;
 
         houses = new LinkedList<>();
 
         Player player = players.getPlayerOne();
+
 //        initialize player one store
         houses.add(new House(HouseType.STORE, 0, player));
-        for(int i=1; i<level; i++) {
+        for(int i=1; i<level+1; i++) {
             houses.add(new House(HouseType.HOUSE, seedsPerPlayer, player));
         }
 
         player = players.getNext(player);
 //        initialize player two store
-        houses.add(new House(HouseType.STORE, seedsPerPlayer, player));
-        for(int i=1; i<level; i++) {
+        houses.add(new House(HouseType.STORE, 0, player));
+        for(int i=1; i<level+1; i++) {
             houses.add(new House(HouseType.HOUSE, seedsPerPlayer, player));
         }
     }
