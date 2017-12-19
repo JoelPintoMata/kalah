@@ -72,34 +72,32 @@ public class StrategyImpl implements Strategy {
 //                the end of the list is reached, go to the beginning
                 positionAux = 0;
             }
-            boardHouses.get(positionAux).setSeeds(boardHouses.get(positionAux).getSeeds() + 1);
-            if (isGameWon(boardHouses, player)) {
-//                the game is won, nothing else to do here
-                winner = player;
-                nextPlayer = null;
-                return;
-            }
-            if (--numberOfStones == 0) {
+            if (numberOfStones == 1) {
                 if (boardHouses.get(positionAux).getPlayer().equals(player) &&
                         boardHouses.get(positionAux).getSeeds() == 0) {
 //                    capture the current seed plus any seeds the opponent has on the opposed house
                     captureCurrentAndOponentSeeds(board, positionAux);
 //                    no more stones to play
                     nextPlayer = players.getNext(player);
-                    return;
-                }
+                } else {
+                    if (boardHouses.get(positionAux).getHouseType().equals(HouseType.STORE)) {
+//                        the current player wins one more play
+                        nextPlayer = player;
+                    }
 
-                if (boardHouses.get(positionAux).getHouseType().equals(HouseType.STORE)) {
-//                    the current player wins one more play
-                    nextPlayer = player;
-                    return;
+                    if (boardHouses.get(positionAux).getHouseType().equals(HouseType.HOUSE)) {
+//                        the current player wins one more play
+                        nextPlayer = players.getNext(player);
+                    }
+                    boardHouses.get(positionAux).setSeeds(boardHouses.get(positionAux).getSeeds() + 1);
                 }
-
-//                no more stones to play
-                nextPlayer = players.getNext(player);
                 return;
+            } else {
+                boardHouses.get(positionAux).setSeeds(boardHouses.get(positionAux).getSeeds() + 1);
+                --numberOfStones;
+                nextPlayer = players.getNext(player);
+                positionAux++;
             }
-            positionAux++;
         } while (true);
     }
 
@@ -125,7 +123,7 @@ public class StrategyImpl implements Strategy {
      */
     private void captureCurrentAndOponentSeeds(Board board, int positionAux) {
         Player player = board.getHouses().get(positionAux).getPlayer();
-        board.setCapturedSeeds(player, 1 + board.getOpponentSeeds(positionAux));
+        board.captureSeeds(player, 1 + board.getOpponentSeeds(positionAux));
     }
 
     /**

@@ -16,7 +16,12 @@ public interface Board {
 	 */
     void setup(int level, int strategy);
 
-	void setCapturedSeeds(Player player, int i);
+    /**
+     * Capture seeds in the player store
+     * @param player the player
+     * @param numberOfSeeds the number of seeds captured
+     */
+	void captureSeeds(Player player, int numberOfSeeds);
 
 	/**
 	 * Gets the number of seeds on the opposed (opponents) house
