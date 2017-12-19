@@ -27,20 +27,23 @@ public class BoardImpl implements Board {
 
         houses = new LinkedList<>();
 
+        int i=0;
         Player player = players.getPlayerOne();
-
-//        initialize player one store
-        houses.add(new House(HouseType.STORE, 0, player));
-        for(int i=1; i<level+1; i++) {
-            houses.add(new House(HouseType.HOUSE, seedsPerPlayer, player));
+//        initialize player one houses
+        for(; i<level; i++) {
+            houses.add(new House(i, HouseType.HOUSE, seedsPerPlayer, player));
         }
+//        initialize player one store
+        houses.add(new House(i++, HouseType.STORE, 0, player));
 
         player = players.getNext(player);
-//        initialize player two store
-        houses.add(new House(HouseType.STORE, 0, player));
-        for(int i=1; i<level+1; i++) {
-            houses.add(new House(HouseType.HOUSE, seedsPerPlayer, player));
+//        initialize player two houses
+        for(; i<(level*2)+1; i++) {
+            houses.add(new House(i, HouseType.HOUSE, seedsPerPlayer, player));
         }
+
+//        initialize player two store
+        houses.add(new House(i, HouseType.STORE, 0, player));
     }
 
     @Override

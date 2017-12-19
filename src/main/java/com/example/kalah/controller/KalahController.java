@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class KalahController {
@@ -34,6 +36,10 @@ public class KalahController {
 
         model.addAttribute("player", player);
         model.addAttribute("boardHouses", boardHouses);
+        List<House> boardHousesToReverse = boardHouses.stream().map(house -> new House(house.getId(), house.getHouseType(), house.getSeeds(), house.getPlayer()))
+                .collect(Collectors.toList());
+        Collections.reverse(boardHousesToReverse);
+        model.addAttribute("reversedBoardHouses", boardHousesToReverse);
 
         return "play";
     }
@@ -49,6 +55,10 @@ public class KalahController {
         Player player = kalah.getFirstPlayer();
 
         model.addAttribute("boardHouses", boardHouses);
+        List<House> boardHousesToReverse = boardHouses.stream().map(house -> new House(house.getId(), house.getHouseType(), house.getSeeds(), house.getPlayer()))
+                .collect(Collectors.toList());
+        Collections.reverse(boardHousesToReverse);
+        model.addAttribute("reversedBoardHouses", boardHousesToReverse);
         model.addAttribute("player", player);
 
         return "play";
@@ -70,8 +80,11 @@ public class KalahController {
         Player player = kalah.getNextPlayer();
         Player winner = kalah.getWinner();
 
-
         model.addAttribute("boardHouses", boardHouses);
+        List<House> boardHousesToReverse = boardHouses.stream().map(house -> new House(house.getId(), house.getHouseType(), house.getSeeds(), house.getPlayer()))
+                .collect(Collectors.toList());
+        Collections.reverse(boardHousesToReverse);
+        model.addAttribute("reversedBoardHouses", boardHousesToReverse);
         model.addAttribute("player", player);
         model.addAttribute("winner", winner);
 
