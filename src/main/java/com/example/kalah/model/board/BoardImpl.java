@@ -6,8 +6,10 @@ import com.example.kalah.strategy.Strategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class BoardImpl implements Board {
@@ -19,6 +21,9 @@ public class BoardImpl implements Board {
 
     private List<House> houses;
 
+//    maps a player id to its store position in the board
+    private Map stores;
+
     private int level;
 
     @Override
@@ -26,6 +31,7 @@ public class BoardImpl implements Board {
         this.level = level;
 
         houses = new LinkedList<>();
+        stores = new HashMap();
 
         int i=0;
         Player player = players.getPlayerOne();
@@ -35,6 +41,7 @@ public class BoardImpl implements Board {
         }
 //        initialize player one store
         houses.add(new House(i++, HouseType.STORE, 0, player));
+        stores.put(player.getId(), i);
 
         player = players.getNext(player);
 //        initialize player two houses
@@ -44,6 +51,7 @@ public class BoardImpl implements Board {
 
 //        initialize player two store
         houses.add(new House(i, HouseType.STORE, 0, player));
+        stores.put(player.getId(), i);
     }
 
     @Override
@@ -54,10 +62,10 @@ public class BoardImpl implements Board {
     @Override
     public void captureSeeds(Player player, int seeds) {
         if(player.equals(players.getPlayerOne())) {
-            houses.get(level).setSeeds(houses.get(level).getSeeds() + seeds);
+            houses.get(stores.get(player.getId())).setSeeds(houses.get(player.getId()).getSeeds() + seeds);
         }
         else {
-            houses.get((level * 2) + 1).setSeeds(houses.get((level * 2) + 1).getSeeds() + seeds);
+            houses.get(player.getId()).setSeeds(houses.get(player.getId()).getSeeds() + seeds);
         }
     }
 

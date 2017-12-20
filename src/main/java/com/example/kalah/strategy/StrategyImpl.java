@@ -51,22 +51,23 @@ public class StrategyImpl implements Strategy {
 
         isPlayValid(player, position);
 
-        playAux(player, position);
+        playAux(position);
     }
 
     /**
      * Executes a play
-     * @param player the player
      * @param position the position
      * @throws BoardException
      */
-    private void playAux(Player player, int position) {
+    private void playAux(int position) {
+        Player player = board.getHouses().get(position).getPlayer();
         List<House> boardHouses = this.board.getHouses();
 
         int numberOfStones = boardHouses.get(position).getSeeds();
         boardHouses.get(position).setSeeds(0);
 
         int positionAux = ++position;
+
         do {
             if (numberOfStones == 1) {
                 if (boardHouses.get(positionAux).getPlayer().equals(player) &&
