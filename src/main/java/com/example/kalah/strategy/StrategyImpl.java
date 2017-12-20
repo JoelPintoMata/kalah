@@ -57,7 +57,6 @@ public class StrategyImpl implements Strategy {
     /**
      * Executes a play
      * @param position the position
-     * @throws BoardException
      */
     private void playAux(int position) {
         Player player = board.getHouses().get(position).getPlayer();
