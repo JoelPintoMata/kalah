@@ -52,23 +52,6 @@ public class BoardImpl implements Board {
     }
 
     @Override
-    public int getOpponentSeeds(int position) {
-        int opponentPosition = (((level + 1) * 2) - 1) - position;
-        int opponentSeeds;
-        if(getHouses().get(position).getPlayer().equals(players.getPlayerOne())) {
-            opponentSeeds = houses.get(opponentPosition).getSeeds();
-//            reset the opponent seeds
-            houses.get(opponentPosition).setSeeds(0);
-            return opponentSeeds;
-        } else {
-            opponentSeeds = houses.get(opponentPosition).getSeeds();
-//            reset the opponent seeds
-            houses.get(opponentPosition).setSeeds(0);
-            return opponentSeeds;
-        }
-    }
-
-    @Override
     public void captureSeeds(Player player, int seeds) {
         if(player.equals(players.getPlayerOne())) {
             houses.get(level).setSeeds(houses.get(level).getSeeds() + seeds);
@@ -76,5 +59,9 @@ public class BoardImpl implements Board {
         else {
             houses.get((level * 2) + 1).setSeeds(houses.get((level * 2) + 1).getSeeds() + seeds);
         }
+    }
+
+    public int getLevel() {
+        return level;
     }
 }

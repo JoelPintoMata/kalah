@@ -24,15 +24,14 @@ public interface Board {
 	void captureSeeds(Player player, int numberOfSeeds);
 
 	/**
-	 * Gets the number of seeds on the opposed (opponents) house
-	 * @param position the position
-	 * @return the number of seeds on the opposed (opponents) house
-	 */
-    int getOpponentSeeds(int position);
-
-	/**
 	 * Gets this game board houses
 	 * @return a list of this game board houses
 	 */
 	List<House> getHouses();
+
+    /**
+     * Gets the board level
+     * @return the board level
+     */
+    int getLevel();
 }

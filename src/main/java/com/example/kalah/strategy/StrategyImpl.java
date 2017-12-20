@@ -68,15 +68,13 @@ public class StrategyImpl implements Strategy {
 
         int positionAux = ++position;
         do {
-            if (positionAux > boardHouses.size()-1) {
-//                the end of the list is reached, go to the beginning
-                positionAux = 0;
-            }
             if (numberOfStones == 1) {
                 if (boardHouses.get(positionAux).getPlayer().equals(player) &&
                         boardHouses.get(positionAux).getSeeds() == 0) {
 //                    capture the current seed plus any seeds the opponent has on the opposed house
-                    captureCurrentAndOponentSeeds(board, positionAux);
+                    captureOponentSeeds(board, positionAux);
+                    captureSeed(board, positionAux);
+
 //                    no more stones to play
                     nextPlayer = players.getNext(player);
                 } else {
@@ -96,9 +94,24 @@ public class StrategyImpl implements Strategy {
                 boardHouses.get(positionAux).setSeeds(boardHouses.get(positionAux).getSeeds() + 1);
                 --numberOfStones;
                 nextPlayer = players.getNext(player);
-                positionAux++;
             }
+            positionAux = nextPosition(positionAux, boardHouses.size());
         } while (true);
+    }
+
+    /**
+     * Calculates the next position
+     * @param position the current position
+     * @param boardHousesSize the number of houses in the board
+     * @return
+     */
+    private int nextPosition(int position, int boardHousesSize) {
+        if (position == boardHousesSize-1) {
+//            the end of the list is reached, go to the beginning
+            return  0;
+        } else {
+            return ++position;
+        }
     }
 
     @Override
@@ -118,12 +131,33 @@ public class StrategyImpl implements Strategy {
     }
 
     /**
-     * @param board
-     * @param positionAux
+     * Captures the opponent seeds.
+     *  1) retrieves the seeds in the opposite position house
+     *  2) resets the opposite position house number of seeds
+     *  3) adds the opponents seeds to the current position player house
+     * @param board the board game
+     * @param position the position
      */
-    private void captureCurrentAndOponentSeeds(Board board, int positionAux) {
-        Player player = board.getHouses().get(positionAux).getPlayer();
-        board.captureSeeds(player, 1 + board.getOpponentSeeds(positionAux));
+    private void captureOponentSeeds(Board board, int position) {
+        Player player = board.getHouses().get(position).getPlayer();
+
+        int opponentPosition = (((board.getLevel() + 1) * 2) - 1) - position;
+
+        board.captureSeeds(player, board.getHouses().get(opponentPosition).getSeeds());
+
+//        reset the number of seeds the opponent position
+        board.getHouses().get(opponentPosition).setSeeds(0);
+    }
+
+    /**
+     * Captures a single seed
+     * @param board the board game
+     * @param position the position
+     */
+    private void captureSeed(Board board, int position) {
+        Player player = board.getHouses().get(position).getPlayer();
+
+        board.captureSeeds(player, 1);
     }
 
     /**
