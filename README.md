@@ -15,9 +15,10 @@ Position indexes are zero based
 ## Controllers
 
 ### URI(s)
-Descriotion | URI | Example
+Description | URI | Example
 ----------- | --- | -------
- | | http://localhost:8080/setup/level/6
- | | http://localhost:8080/setup/level/6/strategy/someStrategy
- | | http://localhost:8080/play/player/1/position/3
+Default initialization of Kalah | | http://localhost:8080/setup
+Initialization of Kalah with a given level | | http://localhost:8080/setup/level/6
+Initialization of Kalah with a given level and strategy | | http://localhost:8080/setup/level/6/strategy/someStrategy
+A player performs a plays on a given position | | http://localhost:8080/play/player/1/position/3
 
