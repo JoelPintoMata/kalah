@@ -8,7 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan({"com.example.kalah.model.player",
-        "com.example.kalah.model.board"})
+        "com.example.kalah.model.board",
+        "com.example.kalah.strategy"})
 public class KalahApplication {
 
 	public static void main(String[] args) {
