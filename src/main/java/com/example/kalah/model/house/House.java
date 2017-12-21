@@ -1,9 +1,12 @@
-package com.example.kalah.model.board;
+package com.example.kalah.model.house;
 
 import com.example.kalah.model.player.Player;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Board House implementation class
+ */
 public class House {
 
     @Getter

@@ -2,7 +2,7 @@ package com.example.kalah.board;
 
 
 import com.example.kalah.model.board.BoardException;
-import com.example.kalah.model.board.House;
+import com.example.kalah.model.house.House;
 import com.example.kalah.model.player.Player;
 import com.example.kalah.strategy.Strategy;
 import com.example.kalah.strategy.StrategyFactory;
@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Kalah game implementation class
+ */
 @Service
 public class Kalah {
 

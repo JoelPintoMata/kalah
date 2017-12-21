@@ -1,8 +1,8 @@
 package com.example.kalah.model.board;
 
+import com.example.kalah.model.house.House;
 import com.example.kalah.model.player.Player;
 import com.example.kalah.model.player.Players;
-import com.example.kalah.strategy.Strategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +11,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A game board concrete implementation class
+ */
 @Component
 public class BoardImpl implements Board {
 

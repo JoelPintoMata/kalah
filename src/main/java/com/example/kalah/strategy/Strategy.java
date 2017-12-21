@@ -2,6 +2,7 @@ package com.example.kalah.strategy;
 
 import com.example.kalah.model.board.BoardException;
 import com.example.kalah.model.board.House;
+import com.example.kalah.model.house.House;
 import com.example.kalah.model.player.Player;
 
 import java.util.List;

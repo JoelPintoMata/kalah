@@ -1,4 +1,4 @@
-package com.example.kalah.model.board;
+package com.example.kalah.comparator;
 
 import org.springframework.stereotype.Component;
 

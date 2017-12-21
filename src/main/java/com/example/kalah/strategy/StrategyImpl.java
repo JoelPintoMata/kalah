@@ -1,6 +1,8 @@
 package com.example.kalah.strategy;
 
-import com.example.kalah.model.board.*;
+import com.example.kalah.model.board.Board;
+import com.example.kalah.model.board.BoardException;
+import com.example.kalah.model.house.House;
 import com.example.kalah.model.player.Player;
 import com.example.kalah.model.player.Players;
 import org.springframework.beans.factory.annotation.Autowired;

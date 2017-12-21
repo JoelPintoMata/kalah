@@ -1,4 +1,4 @@
-package com.example.kalah.model.board;
+package com.example.kalah.comparator;
 
 import com.example.kalah.KalahApplication;
 import com.example.kalah.model.player.Player;

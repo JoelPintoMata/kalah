@@ -1,5 +1,6 @@
 package com.example.kalah.model.board;
 
+import com.example.kalah.model.house.House;
 import com.example.kalah.model.player.Player;
 
 import java.util.List;

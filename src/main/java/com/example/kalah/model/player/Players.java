@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Class implementing/managing this game players
+ * Players implementation class
  */
 @Component
 public class Players {
