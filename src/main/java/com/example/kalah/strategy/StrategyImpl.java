@@ -53,6 +53,22 @@ public class StrategyImpl implements Strategy {
         playAux(position);
     }
 
+    @Override
+    public Player getFirstPlayer() {
+//        default rule
+        return getBoardHouses().get(0).getPlayer();
+    }
+
+    @Override
+    public Player getNextPlayer() {
+        return this.nextPlayer;
+    }
+
+    @Override
+    public Player getWinner() {
+        return this.winner;
+    }
+
     /**
      * Executes a play
      * @param position the position
@@ -72,7 +88,7 @@ public class StrategyImpl implements Strategy {
 //                        the current player wins one more play
                     nextPlayer = currentPlayer;
 
-                    boardHouses.get(position).setSeeds(boardHouses.get(position).getSeeds() + 1);
+                    incHouseSeeds(position, 1);
                 } else if (boardHouses.get(position).getPlayer().equals(currentPlayer) &&
                         boardHouses.get(position).getSeeds() == 0) {
 //                    capture the current seed plus any seeds the opponent has on the opposed house
@@ -82,16 +98,16 @@ public class StrategyImpl implements Strategy {
 //                    no more stones to play
                     nextPlayer = players.getNext(currentPlayer);
                 } else {
-                    boardHouses.get(position).setSeeds(boardHouses.get(position).getSeeds() + 1);
+                    incHouseSeeds(position, 1);
                     nextPlayer = players.getNext(currentPlayer);
                 }
                 isFinished = true;
             } else {
-                boardHouses.get(position).setSeeds(boardHouses.get(position).getSeeds() + 1);
+                incHouseSeeds(position, 1);
                 --numberOfStones;
             }
             if(isGameWon()) {
-                winner = whoWOn();
+                winner = winningPlayer();
                 nextPlayer = null;
             } else if(!isFinished)
                 position = nextPosition(position);
@@ -99,10 +115,20 @@ public class StrategyImpl implements Strategy {
     }
 
     /**
-     *
-     * @return
+     * Increments the number of seeds in a house
+     * @param position the position
+     * @param seeds the number of seeds to increment
      */
-    private Player whoWOn() {
+    private void incHouseSeeds(int position, int seeds) {
+        House house = board.getHouses().get(position);
+        house.setSeeds(house.getSeeds() + seeds);
+    }
+
+    /**
+     * Gets this game winning player
+     * @return this game winning player
+     */
+    private Player winningPlayer() {
         List<House> playersStore = players.getPlayers().stream().map(player -> board.getStore(player)).collect(Collectors.toList());
         return playersStore.stream().max(winningPlayerComparator::compare).get().getPlayer();
     }
@@ -110,7 +136,7 @@ public class StrategyImpl implements Strategy {
     /**
      * Calculates the next position
      * @param position the current position
-     * @return
+     * @return the next position
      */
     private int nextPosition(int position) {
         if (position == board.getHouses().size()-1) {
@@ -119,22 +145,6 @@ public class StrategyImpl implements Strategy {
         } else {
             return ++position;
         }
-    }
-
-    @Override
-    public Player getFirstPlayer() {
-//        default rule
-        return getBoardHouses().get(0).getPlayer();
-    }
-
-    @Override
-    public Player getNextPlayer() {
-        return this.nextPlayer;
-    }
-
-    @Override
-    public Player getWinner() {
-        return this.winner;
     }
 
     /**
@@ -175,7 +185,7 @@ public class StrategyImpl implements Strategy {
             throw new BoardException("The player can only play on his side of the board");
 
         if(board.get(position).getHouseType().equals(HouseType.STORE))
-            throw new BoardException("The player stores cannot be chose");
+            throw new BoardException("The player stores cannot be played");
     }
 
     /**
