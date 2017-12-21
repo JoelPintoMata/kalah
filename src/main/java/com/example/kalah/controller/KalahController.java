@@ -25,6 +25,24 @@ public class KalahController {
     @Autowired
     private Board board;
 
+    @RequestMapping(method = RequestMethod.GET, path="/setup")
+    public String setupDefaultLeveStrategy(
+            Model model) {
+        kalah.setup(null, null);
+
+        List<House> boardHouses = kalah.getBoardHouses();
+        Player player = kalah.getFirstPlayer();
+
+        model.addAttribute("player", player);
+        model.addAttribute("boardHouses", boardHouses);
+        List<House> boardHousesToReverse = boardHouses.stream().map(house -> new House(house.getId(), house.getHouseType(), house.getSeeds(), house.getPlayer()))
+                .collect(Collectors.toList());
+        Collections.reverse(boardHousesToReverse);
+        model.addAttribute("reversedBoardHouses", boardHousesToReverse);
+
+        return "play";
+    }
+
     @RequestMapping(method = RequestMethod.GET, path="/setup/level/{level}")
     public String setupDefaultStrategy(
             @PathVariable("level") int level,

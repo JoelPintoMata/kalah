@@ -1,15 +1,13 @@
 package com.example.kalah.strategy;
 
-import com.example.kalah.model.board.Board;
-import com.example.kalah.model.board.BoardException;
-import com.example.kalah.model.board.House;
-import com.example.kalah.model.board.HouseType;
+import com.example.kalah.model.board.*;
 import com.example.kalah.model.player.Player;
 import com.example.kalah.model.player.Players;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Concrete implementation of a kalah strategy
@@ -24,11 +22,13 @@ public class StrategyImpl implements Strategy {
     @Autowired
     private Players players;
 
+    @Autowired
+    private WinningPlayerComparator winningPlayerComparator;
+
 //    the number of initial seeds per player
     private static final int SEEDS_PER_PLAYER = 4;
 
-    private boolean gameWon = false;
-
+    private Player currentPlayer;
     private Player winner;
     private Player nextPlayer;
 
@@ -45,11 +45,10 @@ public class StrategyImpl implements Strategy {
 
     @Override
     public void play(int playerId, int position) throws BoardException {
-
 //        player list index is zero based
-        Player player = players.getPlayerById(playerId);
+        currentPlayer = players.getPlayerById(playerId);
 
-        isPlayValid(player, position);
+        isPlayValid(position);
 
         playAux(position);
     }
@@ -59,54 +58,62 @@ public class StrategyImpl implements Strategy {
      * @param position the position
      */
     private void playAux(int position) {
-        Player player = board.getHouses().get(position).getPlayer();
         List<House> boardHouses = this.board.getHouses();
+        House currentHouse = boardHouses.get(position);
 
-        int numberOfStones = boardHouses.get(position).getSeeds();
-        boardHouses.get(position).setSeeds(0);
+        int numberOfStones = currentHouse.getSeeds();
+        currentHouse.setSeeds(0);
+        position++;
 
-        int positionAux = ++position;
-
+        boolean isFinished = false;
         do {
             if (numberOfStones == 1) {
-                if (boardHouses.get(positionAux).getPlayer().equals(player) &&
-                        boardHouses.get(positionAux).getSeeds() == 0) {
+                if (boardHouses.get(position).getHouseType().equals(HouseType.STORE)) {
+//                        the current player wins one more play
+                    nextPlayer = currentPlayer;
+
+                    boardHouses.get(position).setSeeds(boardHouses.get(position).getSeeds() + 1);
+                } else if (boardHouses.get(position).getPlayer().equals(currentPlayer) &&
+                        boardHouses.get(position).getSeeds() == 0) {
 //                    capture the current seed plus any seeds the opponent has on the opposed house
-                    captureOponentSeeds(board, positionAux);
-                    captureSeed(board, positionAux);
+                    captureOponentSeeds(position);
+                    captureSeed();
 
 //                    no more stones to play
-                    nextPlayer = players.getNext(player);
+                    nextPlayer = players.getNext(currentPlayer);
                 } else {
-                    if (boardHouses.get(positionAux).getHouseType().equals(HouseType.STORE)) {
-//                        the current player wins one more play
-                        nextPlayer = player;
-                    }
-
-                    if (boardHouses.get(positionAux).getHouseType().equals(HouseType.HOUSE)) {
-//                        the current player wins one more play
-                        nextPlayer = players.getNext(player);
-                    }
-                    boardHouses.get(positionAux).setSeeds(boardHouses.get(positionAux).getSeeds() + 1);
+                    boardHouses.get(position).setSeeds(boardHouses.get(position).getSeeds() + 1);
+                    nextPlayer = players.getNext(currentPlayer);
                 }
-                return;
+                isFinished = true;
             } else {
-                boardHouses.get(positionAux).setSeeds(boardHouses.get(positionAux).getSeeds() + 1);
+                boardHouses.get(position).setSeeds(boardHouses.get(position).getSeeds() + 1);
                 --numberOfStones;
-                nextPlayer = players.getNext(player);
             }
-            positionAux = nextPosition(positionAux, boardHouses.size());
-        } while (true);
+            if(isGameWon()) {
+                winner = whoWOn();
+                nextPlayer = null;
+            } else if(!isFinished)
+                position = nextPosition(position);
+        } while (!isFinished);
+    }
+
+    /**
+     *
+     * @return
+     */
+    private Player whoWOn() {
+        List<House> playersStore = players.getPlayers().stream().map(player -> board.getStore(player)).collect(Collectors.toList());
+        return playersStore.stream().max(winningPlayerComparator::compare).get().getPlayer();
     }
 
     /**
      * Calculates the next position
      * @param position the current position
-     * @param boardHousesSize the number of houses in the board
      * @return
      */
-    private int nextPosition(int position, int boardHousesSize) {
-        if (position == boardHousesSize-1) {
+    private int nextPosition(int position) {
+        if (position == board.getHouses().size()-1) {
 //            the end of the list is reached, go to the beginning
             return  0;
         } else {
@@ -135,15 +142,12 @@ public class StrategyImpl implements Strategy {
      *  1) retrieves the seeds in the opposite position house
      *  2) resets the opposite position house number of seeds
      *  3) adds the opponents seeds to the current position player house
-     * @param board the board game
      * @param position the position
      */
-    private void captureOponentSeeds(Board board, int position) {
-        Player player = board.getHouses().get(position).getPlayer();
+    private void captureOponentSeeds(int position) {
+        int opponentPosition = (board.getHouses().size() - 1) - position;
 
-        int opponentPosition = (((board.getLevel() + 1) * 2) - 1) - position;
-
-        board.captureSeeds(player, board.getHouses().get(opponentPosition).getSeeds());
+        board.captureSeeds(currentPlayer, board.getHouses().get(opponentPosition).getSeeds());
 
 //        reset the number of seeds the opponent position
         board.getHouses().get(opponentPosition).setSeeds(0);
@@ -151,48 +155,37 @@ public class StrategyImpl implements Strategy {
 
     /**
      * Captures a single seed
-     * @param board the board game
-     * @param position the position
      */
-    private void captureSeed(Board board, int position) {
-        Player player = board.getHouses().get(position).getPlayer();
-
-        board.captureSeeds(player, 1);
+    private void captureSeed() {
+        board.captureSeeds(currentPlayer, 1);
     }
 
     /**
      * Validates this play
-     * @param player the player
      * @param position the position
      * @throws BoardException if the play is invalid
      */
-    private void isPlayValid(Player player, int position) throws BoardException {
+    private void isPlayValid(int position) throws BoardException {
         List<House> board = this.board.getHouses();
 
-        if(player != nextPlayer)
+        if(currentPlayer != nextPlayer)
             throw new BoardException("Un-expected player");
 
-        if(player != board.get(position).getPlayer())
-                throw new BoardException("The player can only play on his side of the board");
+        if(currentPlayer != board.get(position).getPlayer())
+            throw new BoardException("The player can only play on his side of the board");
 
         if(board.get(position).getHouseType().equals(HouseType.STORE))
             throw new BoardException("The player stores cannot be chose");
     }
 
     /**
-     *
-     * @param board the game board
-     * @param player the player
+     * Checks if the game is won
      * @return the id of the wining player or null otherwise
      */
-    private boolean isGameWon(List<House> board, Player player) {
-        boolean result = false;
-        if(((board.size()/2 - 1) == SEEDS_PER_PLAYER * (board.size()/2 - 1))
-                || ((board.size() - 1) == SEEDS_PER_PLAYER * (board.size()/2 - 1))) {
-            this.gameWon = true;
-            this.winner = player;
-            result = true;
-        }
-        return result;
+    private boolean isGameWon() {
+        return board.getHouses().stream().filter(house -> house.getPlayer().equals(currentPlayer)
+                && house.getHouseType().equals(HouseType.HOUSE)
+                && house.getSeeds() != 0
+        ).collect(Collectors.toList()).isEmpty();
     }
 }

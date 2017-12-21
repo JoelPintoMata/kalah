@@ -14,18 +14,25 @@ import java.util.List;
 @Service
 public class Kalah {
 
+    private final int DEFAULT_LEVEL = 6;
+
     @Autowired
     private StrategyFactory strategyFactory;
 
-    private int level;
     private Strategy strategy;
 
-    public void setup(int level, String strategyName) {
-        this.level = level;
-
+    /**
+     *
+     * @param level
+     * @param strategyName
+     */
+    public void setup(Integer level, String strategyName) {
         strategy = strategyFactory.get(strategyName);
 
-        strategy.setup(level);
+        if(level == null)
+            strategy.setup(DEFAULT_LEVEL);
+        else
+            strategy.setup(level);
     }
 
     public List<House> getBoardHouses() {

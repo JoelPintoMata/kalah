@@ -30,8 +30,9 @@ public interface Board {
 	List<House> getHouses();
 
     /**
-     * Gets the board level
-     * @return the board level
+     * Gets a player store type house
+     * @param player the player
+     * @return a player store house
      */
-    int getLevel();
+    House getStore(Player player);
 }

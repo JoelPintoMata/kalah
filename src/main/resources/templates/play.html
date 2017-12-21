@@ -12,6 +12,13 @@
 
 </head>
 <body>
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <a th:href="@{/setup}">Play</a>
+            </div>
+        </div>
+    </nav>
     <div class="container">
         <div class="starter-template">
             <h1>Kalah</h1>
@@ -19,17 +26,17 @@
                 <span th:if="${message != null}" th:text="'Message: ' + ${message}"></span>
             </h2>
             <h2>
-                <span th:if="${winner != null}" th:text="'Winner: ' + ${winner.id} + ' (' + ${winner.seedsCaptured} + ' seeds captured)'"></span>
+                <span th:if="${winner != null}" th:text="'Winner: ' + ${winner.id}"></span>
             </h2>
             <h3>
-                <span th:if="${winner == null}" th:text="'Next player: ' + ${player.id} + ' (' + ${player.seedsCaptured} + ' seeds captured)'"></span>
+                <span th:if="${winner == null}" th:text="'Next player: ' + ${player.id}"></span>
             </h3>
             <table>
                 <tr>
                     <td><label>|</label></td>
                     <span th:each="house,iterStat : ${reversedBoardHouses}" th:if="${house.id gt #lists.size(reversedBoardHouses)/2-1}">
                         <td>
-                            <a th:if="${#strings.toString(house.houseType)} == 'HOUSE'" th:href="@{/play/player/{player}/position/{id}(id=${house.id}, player=${house.player.id})}">Play</a>
+                            <a th:if="${#strings.toString(house.houseType)} == 'HOUSE' && ${winner == null}" th:href="@{/play/player/{player}/position/{id}(id=${house.id}, player=${house.player.id})}">Play</a>
                         </td>
                         <td><label>|</label></td>
                     </span>
@@ -56,7 +63,7 @@
                     <td><label>|</label></td>
                     <span th:each="house,iterStat : ${boardHouses}" th:if="${iterStat.index lt #lists.size(boardHouses)/2}">
                         <td>
-                            <a th:if="${#strings.toString(house.houseType)} == 'HOUSE'" th:href="@{/play/player/{player}/position/{id}(id=${house.id}, player=${house.player.id})}">Play</a>
+                            <a th:if="${#strings.toString(house.houseType)} == 'HOUSE' && ${winner == null}" th:href="@{/play/player/{player}/position/{id}(id=${house.id}, player=${house.player.id})}">Play</a>
                         </td>
                         <td><label>|</label></td>
                     </span>

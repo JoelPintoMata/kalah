@@ -14,22 +14,16 @@ import java.util.Map;
 @Component
 public class BoardImpl implements Board {
 
-    private Strategy strategy;
-
     @Autowired
     private Players players;
 
     private List<House> houses;
 
 //    maps a player id to its store position in the board
-    private Map stores;
-
-    private int level;
+    private Map<Integer, Integer> stores;
 
     @Override
     public void setup(int level, int seedsPerPlayer) {
-        this.level = level;
-
         houses = new LinkedList<>();
         stores = new HashMap();
 
@@ -40,8 +34,8 @@ public class BoardImpl implements Board {
             houses.add(new House(i, HouseType.HOUSE, seedsPerPlayer, player));
         }
 //        initialize player one store
-        houses.add(new House(i++, HouseType.STORE, 0, player));
         stores.put(player.getId(), i);
+        houses.add(new House(i++, HouseType.STORE, 0, player));
 
         player = players.getNext(player);
 //        initialize player two houses
@@ -50,8 +44,8 @@ public class BoardImpl implements Board {
         }
 
 //        initialize player two store
-        houses.add(new House(i, HouseType.STORE, 0, player));
         stores.put(player.getId(), i);
+        houses.add(new House(i, HouseType.STORE, 0, player));
     }
 
     @Override
@@ -60,16 +54,14 @@ public class BoardImpl implements Board {
     }
 
     @Override
-    public void captureSeeds(Player player, int seeds) {
-        if(player.equals(players.getPlayerOne())) {
-            houses.get(stores.get(player.getId())).setSeeds(houses.get(player.getId()).getSeeds() + seeds);
-        }
-        else {
-            houses.get(player.getId()).setSeeds(houses.get(player.getId()).getSeeds() + seeds);
-        }
+    public House getStore(Player player) {
+        return houses.get(stores.get(Integer.valueOf(player.getId())));
     }
 
-    public int getLevel() {
-        return level;
+    @Override
+    public void captureSeeds(Player player, int seeds) {
+        int PlayerStorePosition = stores.get(Integer.valueOf(player.getId()));
+        House house = houses.get(PlayerStorePosition);
+        house.setSeeds(house.getSeeds() + seeds);
     }
 }
