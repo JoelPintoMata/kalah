@@ -1,6 +1,7 @@
 package com.example.kalah.model.board;
 
 import com.example.kalah.model.house.House;
+import com.example.kalah.model.house.HouseType;
 import com.example.kalah.model.player.Player;
 import com.example.kalah.model.player.Players;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,12 @@ public class BoardImpl implements Board {
 //    maps a player id to its store position in the board
     private Map<Integer, Integer> stores;
 
+    private int level;
+
     @Override
     public void setup(int level, int seedsPerPlayer) {
+        this.level = level;
+
         houses = new LinkedList<>();
         stores = new HashMap();
 
@@ -59,6 +64,11 @@ public class BoardImpl implements Board {
     @Override
     public House getStore(Player player) {
         return houses.get(stores.get(Integer.valueOf(player.getId())));
+    }
+
+    @Override
+    public int getLevel() {
+        return this.level;
     }
 
     @Override

@@ -1,8 +1,10 @@
 package com.example.kalah.strategy;
 
+import com.example.kalah.comparator.WinningPlayerComparator;
 import com.example.kalah.model.board.Board;
 import com.example.kalah.model.board.BoardException;
 import com.example.kalah.model.house.House;
+import com.example.kalah.model.house.HouseType;
 import com.example.kalah.model.player.Player;
 import com.example.kalah.model.player.Players;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +55,9 @@ public class StrategyImpl implements Strategy {
         isPlayValid(position);
 
         playAux(position);
+
+        if(isCorrupted())
+            throw new BoardException("The board is corrupted");
     }
 
     @Override
@@ -69,6 +74,20 @@ public class StrategyImpl implements Strategy {
     @Override
     public Player getWinner() {
         return this.winner;
+    }
+
+    @Override
+    public boolean isCorrupted() {
+        int count = board.getHouses().stream().mapToInt(house -> house.getSeeds()).sum();
+        if(count == (board.getLevel() * SEEDS_PER_PLAYER))
+            return true;
+        else
+            return false;
+    }
+
+    @Override
+    public int getLevel() {
+        return this.board.getLevel();
     }
 
     /**
@@ -90,22 +109,22 @@ public class StrategyImpl implements Strategy {
 //                        the current player wins one more play
                     nextPlayer = currentPlayer;
 
-                    incHouseSeeds(position, 1);
+                    incSeeds(position, 1);
                 } else if (boardHouses.get(position).getPlayer().equals(currentPlayer) &&
                         boardHouses.get(position).getSeeds() == 0) {
 //                    capture the current seed plus any seeds the opponent has on the opposed house
                     captureOponentSeeds(position);
-                    captureSeed();
+                    captureSeeds(1);
 
 //                    no more stones to play
                     nextPlayer = players.getNext(currentPlayer);
                 } else {
-                    incHouseSeeds(position, 1);
+                    incSeeds(position, 1);
                     nextPlayer = players.getNext(currentPlayer);
                 }
                 isFinished = true;
             } else {
-                incHouseSeeds(position, 1);
+                incSeeds(position, 1);
                 --numberOfStones;
             }
             if(isGameWon()) {
@@ -121,7 +140,7 @@ public class StrategyImpl implements Strategy {
      * @param position the position
      * @param seeds the number of seeds to increment
      */
-    private void incHouseSeeds(int position, int seeds) {
+    private void incSeeds(int position, int seeds) {
         House house = board.getHouses().get(position);
         house.setSeeds(house.getSeeds() + seeds);
     }
@@ -167,9 +186,10 @@ public class StrategyImpl implements Strategy {
 
     /**
      * Captures a single seed
+     * @param seeds the number of seeds to capture
      */
-    private void captureSeed() {
-        board.captureSeeds(currentPlayer, 1);
+    private void captureSeeds(int seeds) {
+        board.captureSeeds(currentPlayer, seeds);
     }
 
     /**

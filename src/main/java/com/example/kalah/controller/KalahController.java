@@ -3,7 +3,7 @@ package com.example.kalah.controller;
 import com.example.kalah.board.Kalah;
 import com.example.kalah.model.board.Board;
 import com.example.kalah.model.board.BoardException;
-import com.example.kalah.model.board.House;
+import com.example.kalah.model.house.House;
 import com.example.kalah.model.player.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

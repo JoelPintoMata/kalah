@@ -1,6 +1,8 @@
 package com.example.kalah.comparator;
 
 import com.example.kalah.KalahApplication;
+import com.example.kalah.model.house.House;
+import com.example.kalah.model.house.HouseType;
 import com.example.kalah.model.player.Player;
 import org.junit.Assert;
 import org.junit.Test;

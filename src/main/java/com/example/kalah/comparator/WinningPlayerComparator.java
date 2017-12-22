@@ -1,5 +1,6 @@
 package com.example.kalah.comparator;
 
+import com.example.kalah.model.house.House;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
