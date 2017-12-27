@@ -26,11 +26,8 @@ public class BoardImpl implements Board {
 //    maps a player id to its store position
     private Map<Integer, Integer> stores;
 
-    private int level;
-
     @Override
     public void setup(int level, int seedsPerPlayer) {
-        this.level = level;
 
         houses = new LinkedList<>();
         stores = new HashMap();
