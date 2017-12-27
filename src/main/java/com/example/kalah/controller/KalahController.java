@@ -4,7 +4,6 @@ import com.example.kalah.Kalah;
 import com.example.kalah.model.board.Board;
 import com.example.kalah.model.board.BoardException;
 import com.example.kalah.model.house.House;
-import com.example.kalah.model.player.Player;
 import com.example.kalah.strategy.StrategyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

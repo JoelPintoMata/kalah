@@ -2,7 +2,6 @@ package com.example.kalah.strategy;
 
 import com.example.kalah.comparator.WinningPlayerComparator;
 import com.example.kalah.model.board.Board;
-import com.example.kalah.model.board.BoardException;
 import com.example.kalah.model.house.House;
 import com.example.kalah.model.house.HouseType;
 import com.example.kalah.model.player.Player;
@@ -85,37 +84,52 @@ public class StrategyImpl implements Strategy {
         boolean isPlayFinished = false;
         do {
             if (numberOfStones == 1) {
-                if (boardHouses.get(position).getHouseType().equals(HouseType.STORE)) {
-//                        the current player wins one more play
-                    nextPlayer = currentPlayer;
-
-                    incSeeds(position, 1);
-                } else if (boardHouses.get(position).getPlayer().equals(currentPlayer) &&
-                        boardHouses.get(position).getSeeds() == 0) {
-//                    capture the current seed plus any seeds the opponent has on the opposed house
-                    captureOponentSeeds(position);
-                    captureSeeds(1);
-
-//                    no more stones to play
-                    nextPlayer = players.getNext(currentPlayer);
-                } else {
-                    incSeeds(position, 1);
-                    nextPlayer = players.getNext(currentPlayer);
-                }
+                processPlayLastSeed();
                 isPlayFinished = true;
-//              we cannot play on the opponent store
+//            we cannot play on the opponent store
             } else if (!(boardHouses.get(position).getHouseType().equals(HouseType.STORE)
                     && boardHouses.get(position).getPlayer() != currentPlayer)) {
                 incSeeds(position, 1);
                 --numberOfStones;
             }
             if(isGameWon()) {
-                captureAllSeeds(players.getNext(currentPlayer));
-                winner = winningPlayer();
-                nextPlayer = null;
+                processGameWin();
             } else if(!isPlayFinished)
                 position = nextPosition(position);
         } while (!isPlayFinished);
+    }
+
+    /**
+     * Processes the win/finish of the game
+     */
+    private void processGameWin() {
+        captureAllSeeds(players.getNext(currentPlayer));
+        winner = winningPlayer();
+        nextPlayer = null;
+    }
+
+    /**
+     * Processes the play of the last seed
+     */
+    private void processPlayLastSeed() {
+        List<House> boardHouses = this.board.getHouses();
+        if (boardHouses.get(position).getHouseType().equals(HouseType.STORE)) {
+//                        the current player wins one more play
+            nextPlayer = currentPlayer;
+
+            incSeeds(position, 1);
+        } else if (boardHouses.get(position).getPlayer().equals(currentPlayer) &&
+                boardHouses.get(position).getSeeds() == 0) {
+//                    capture the current seed plus any seeds the opponent has on the opposed house
+            captureOponentSeeds(position);
+            captureSeeds(1);
+
+//                    no more stones to play
+            nextPlayer = players.getNext(currentPlayer);
+        } else {
+            incSeeds(position, 1);
+            nextPlayer = players.getNext(currentPlayer);
+        }
     }
 
     /**
@@ -123,15 +137,14 @@ public class StrategyImpl implements Strategy {
      * @param player the player to capture the seeds
      */
     private void captureAllSeeds(Player player) {
-        List<House> playerHouses = this.board.getHouses().stream()
+        this.board.getHouses()
+                .stream()
                 .filter(x -> x.getPlayer().getId() == player.getId()
-                && x.getHouseType().equals(HouseType.HOUSE))
-                .collect(Collectors.toList());
-
-        playerHouses.stream().forEach(x -> {
-            board.getStore(player).addSeeds(x.getSeeds());
-            x.setSeeds(0);
-        });
+                    && x.getHouseType().equals(HouseType.HOUSE))
+                .forEach(x -> {
+                    board.getStore(player).addSeeds(x.getSeeds());
+                    x.setSeeds(0);
+                });
     }
 
     /**
@@ -149,12 +162,11 @@ public class StrategyImpl implements Strategy {
      * @return this game winning player
      */
     private Player winningPlayer() {
-        List<House> playersStore = players.getPlayers()
+        return players.getPlayers()
                 .stream()
-                .map(player ->
-                        board.getStore(player)).collect(Collectors.toList()
-                );
-        return playersStore.stream().max(winningPlayerComparator::compare).get().getPlayer();
+                .map(player ->board.getStore(player)).collect(Collectors.toList())
+                .stream()
+                .max(winningPlayerComparator::compare).get().getPlayer();
     }
 
     /**
@@ -201,11 +213,11 @@ public class StrategyImpl implements Strategy {
      * @throws StrategyException if the play is invalid
      */
     private void isPlayValid(int position) throws StrategyException {
-        List<House> board = this.board.getHouses();
 
         if(currentPlayer != nextPlayer)
             throw new StrategyException("Un-expected player");
 
+        List<House> board = this.board.getHouses();
         if(currentPlayer != board.get(position).getPlayer())
             throw new StrategyException("The player can only play on his side of the board");
 
