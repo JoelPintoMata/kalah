@@ -34,12 +34,6 @@ public interface Strategy {
     Player getWinPlayer();
 
     /**
-     * Gets the first player
-     * @return the first player
-     */
-    Player getFirstPlayer();
-
-    /**
      * Gets the next player
      * @return the next player
      */

@@ -58,13 +58,10 @@ public class StrategyImpl implements Strategy {
     }
 
     @Override
-    public Player getFirstPlayer() {
-//        default rule
-        return getBoardHouses().get(0).getPlayer();
-    }
-
-    @Override
     public Player getNextPlayer() {
+        if(this.nextPlayer == null)
+//            default rule
+            this.nextPlayer = getBoardHouses().get(0).getPlayer();
         return this.nextPlayer;
     }
 

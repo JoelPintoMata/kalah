@@ -30,16 +30,7 @@ public class KalahController {
     public String setupDefaultLeveStrategy(
             Model model) {
         kalah.setup(null, null);
-
-        List<House> boardHouses = kalah.getBoardHouses();
-        Player player = kalah.getFirstPlayer();
-
-        model.addAttribute("player", player);
-        model.addAttribute("boardHouses", boardHouses);
-        List<House> boardHousesToReverse = boardHouses.stream().map(house -> new House(house.getId(), house.getHouseType(), house.getSeeds(), house.getPlayer()))
-                .collect(Collectors.toList());
-        Collections.reverse(boardHousesToReverse);
-        model.addAttribute("reversedBoardHouses", boardHousesToReverse);
+        loadModel(model, kalah);
 
         return "play";
     }
@@ -49,16 +40,7 @@ public class KalahController {
             @PathVariable("level") int level,
             Model model) {
         kalah.setup(level, null);
-
-        List<House> boardHouses = kalah.getBoardHouses();
-        Player player = kalah.getFirstPlayer();
-
-        model.addAttribute("player", player);
-        model.addAttribute("boardHouses", boardHouses);
-        List<House> boardHousesToReverse = boardHouses.stream().map(house -> new House(house.getId(), house.getHouseType(), house.getSeeds(), house.getPlayer()))
-                .collect(Collectors.toList());
-        Collections.reverse(boardHousesToReverse);
-        model.addAttribute("reversedBoardHouses", boardHousesToReverse);
+        loadModel(model, kalah);
 
         return "play";
     }
@@ -69,16 +51,7 @@ public class KalahController {
             @PathVariable("strategy") String strategy,
             Model model) {
         kalah.setup(level, strategy);
-
-        List<House> boardHouses = kalah.getBoardHouses();
-        Player player = kalah.getFirstPlayer();
-
-        model.addAttribute("boardHouses", boardHouses);
-        List<House> boardHousesToReverse = boardHouses.stream().map(house -> new House(house.getId(), house.getHouseType(), house.getSeeds(), house.getPlayer()))
-                .collect(Collectors.toList());
-        Collections.reverse(boardHousesToReverse);
-        model.addAttribute("reversedBoardHouses", boardHousesToReverse);
-        model.addAttribute("player", player);
+        loadModel(model, kalah);
 
         return "play";
     }
@@ -100,7 +73,7 @@ public class KalahController {
             model.addAttribute("message", e.getMessage());
         }
         if(isLoadModel)
-            isLoadModel(model, kalah);
+            loadModel(model, kalah);
 
         return "play";
     }
@@ -110,17 +83,24 @@ public class KalahController {
      * @param model the view model
      * @param kalah the kalah game data
      */
-    private void isLoadModel(Model model, Kalah kalah) {
+    private void loadModel(Model model, Kalah kalah) {
         List<House> boardHouses = kalah.getBoardHouses();
-        Player player = kalah.getNextPlayer();
-        Player winner = kalah.getWinPlayer();
 
         model.addAttribute("boardHouses", boardHouses);
-        List<House> boardHousesToReverse = boardHouses.stream().map(house -> new House(house.getId(), house.getHouseType(), house.getSeeds(), house.getPlayer()))
+        model.addAttribute("reversedBoardHouses", reserveList(boardHouses));
+        model.addAttribute("player", kalah.getNextPlayer());
+        model.addAttribute("winner", kalah.getWinPlayer());
+    }
+
+    /**
+     * Reverses a list
+     * @param list the list to reverse
+     * @return the reversed list
+     */
+    private List<House> reserveList(List<House> list) {
+        List<House> resersedBoardHouses = list.stream().map(house -> new House(house.getId(), house.getHouseType(), house.getSeeds(), house.getPlayer()))
                 .collect(Collectors.toList());
-        Collections.reverse(boardHousesToReverse);
-        model.addAttribute("reversedBoardHouses", boardHousesToReverse);
-        model.addAttribute("player", player);
-        model.addAttribute("winner", winner);
+        Collections.reverse(resersedBoardHouses);
+        return resersedBoardHouses;
     }
 }

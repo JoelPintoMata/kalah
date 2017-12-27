@@ -76,12 +76,4 @@ public class Kalah {
     public Player getWinPlayer() {
         return strategy.getWinPlayer();
     }
-
-    /**
-     * Gets the first player
-     * @return the first player
-     */
-    public Player getFirstPlayer() {
-        return strategy.getFirstPlayer();
-    }
 }
