@@ -55,9 +55,6 @@ public class StrategyImpl implements Strategy {
         isPlayValid(position);
 
         playAux(position);
-
-        if(isCorrupted())
-            throw new BoardException("The board is corrupted");
     }
 
     @Override
@@ -76,20 +73,6 @@ public class StrategyImpl implements Strategy {
         return this.winner;
     }
 
-    @Override
-    public boolean isCorrupted() {
-        int count = board.getHouses().stream().mapToInt(house -> house.getSeeds()).sum();
-        if(count == (board.getLevel() * SEEDS_PER_PLAYER))
-            return true;
-        else
-            return false;
-    }
-
-    @Override
-    public int getLevel() {
-        return this.board.getLevel();
-    }
-
     /**
      * Executes a play
      * @param position the position
@@ -102,7 +85,7 @@ public class StrategyImpl implements Strategy {
         currentHouse.setSeeds(0);
         position++;
 
-        boolean isFinished = false;
+        boolean isPlayFinished = false;
         do {
             if (numberOfStones == 1) {
                 if (boardHouses.get(position).getHouseType().equals(HouseType.STORE)) {
@@ -122,7 +105,7 @@ public class StrategyImpl implements Strategy {
                     incSeeds(position, 1);
                     nextPlayer = players.getNext(currentPlayer);
                 }
-                isFinished = true;
+                isPlayFinished = true;
             } else {
                 incSeeds(position, 1);
                 --numberOfStones;
@@ -130,9 +113,9 @@ public class StrategyImpl implements Strategy {
             if(isGameWon()) {
                 winner = winningPlayer();
                 nextPlayer = null;
-            } else if(!isFinished)
+            } else if(!isPlayFinished)
                 position = nextPosition(position);
-        } while (!isFinished);
+        } while (!isPlayFinished);
     }
 
     /**
@@ -150,7 +133,11 @@ public class StrategyImpl implements Strategy {
      * @return this game winning player
      */
     private Player winningPlayer() {
-        List<House> playersStore = players.getPlayers().stream().map(player -> board.getStore(player)).collect(Collectors.toList());
+        List<House> playersStore = players.getPlayers()
+                .stream()
+                .map(player ->
+                        board.getStore(player)).collect(Collectors.toList()
+                );
         return playersStore.stream().max(winningPlayerComparator::compare).get().getPlayer();
     }
 

@@ -23,7 +23,7 @@ public class BoardImpl implements Board {
 
     private List<House> houses;
 
-//    maps a player id to its store position in the board
+//    maps a player id to its store position
     private Map<Integer, Integer> stores;
 
     private int level;
@@ -64,11 +64,6 @@ public class BoardImpl implements Board {
     @Override
     public House getStore(Player player) {
         return houses.get(stores.get(Integer.valueOf(player.getId())));
-    }
-
-    @Override
-    public int getLevel() {
-        return this.level;
     }
 
     @Override

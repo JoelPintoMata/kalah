@@ -44,8 +44,4 @@ public interface Strategy {
      * @return the next player
      */
     Player getNextPlayer();
-
-    boolean isCorrupted();
-
-    int getLevel();
 }

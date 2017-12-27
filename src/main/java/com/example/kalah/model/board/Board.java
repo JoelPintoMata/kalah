@@ -36,10 +36,4 @@ public interface Board {
      * @return a player store house
      */
     House getStore(Player player);
-
-	/**
-	 *
-	 * @return
-	 */
-	int getLevel();
 }
