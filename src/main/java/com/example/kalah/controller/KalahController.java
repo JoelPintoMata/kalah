@@ -89,18 +89,29 @@ public class KalahController {
             @PathVariable("position") int position,
             Model model) {
 
-        List<House> boardHouses;
+        boolean isLoadModel = true;
         try {
             kalah.play(playerId, position);
 
         } catch (BoardException e) {
             model.addAttribute("message", e.getMessage());
-            return "play";
+            isLoadModel = false;
         } catch (StrategyException e) {
             model.addAttribute("message", e.getMessage());
         }
+        if(isLoadModel)
+            isLoadModel(model, kalah);
 
-        boardHouses = kalah.getBoardHouses();
+        return "play";
+    }
+
+    /**
+     * Loads the model with the kalah game data
+     * @param model the view model
+     * @param kalah the kalah game data
+     */
+    private void isLoadModel(Model model, Kalah kalah) {
+        List<House> boardHouses = kalah.getBoardHouses();
         Player player = kalah.getNextPlayer();
         Player winner = kalah.getWinPlayer();
 
@@ -111,7 +122,5 @@ public class KalahController {
         model.addAttribute("reversedBoardHouses", boardHousesToReverse);
         model.addAttribute("player", player);
         model.addAttribute("winner", winner);
-
-        return "play";
     }
 }
