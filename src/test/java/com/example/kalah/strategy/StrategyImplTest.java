@@ -32,6 +32,40 @@ public class StrategyImplTest {
         Assert.assertNotNull(strategy.getBoardHouses());
     }
 
+    /**
+     * Tests that player stores cannot be played
+     * @throws StrategyException
+     */
+    @Test(expected = StrategyException.class)
+    public void playPlayer1Store() throws StrategyException {
+        strategy.setup(6);
+        List<House> houseList = strategy.getBoardHouses();
+        strategy.play(houseList.get(0).getPlayer().getId(), 6);
+    }
+
+    /**
+     * Tests that player stores cannot be played
+     * @throws StrategyException
+     */
+    @Test(expected = StrategyException.class)
+    public void playPlayer2Store() throws StrategyException {
+        strategy.setup(6);
+        List<House> houseList = strategy.getBoardHouses();
+        strategy.play(houseList.get(7).getPlayer().getId(), 13);
+    }
+
+    /**
+     * Tests that zero seed houses cannot be played
+     * @throws StrategyException
+     */
+    @Test(expected = StrategyException.class)
+    public void playZeroSeedHouse() throws StrategyException {
+        strategy.setup(6);
+        List<House> houseList = strategy.getBoardHouses();
+        houseList.get(4).setSeeds(0);
+        strategy.play(houseList.get(0).getPlayer().getId(), 4);
+    }
+
     @Test
     public void play() throws StrategyException{
 

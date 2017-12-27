@@ -1,12 +1,14 @@
 package com.example.kalah.model.house;
 
 import com.example.kalah.model.player.Player;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * Board House implementation class
  */
+@EqualsAndHashCode
 public class House {
 
     @Getter

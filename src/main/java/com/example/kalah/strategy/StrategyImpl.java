@@ -106,7 +106,9 @@ public class StrategyImpl implements Strategy {
                     nextPlayer = players.getNext(currentPlayer);
                 }
                 isPlayFinished = true;
-            } else {
+//              we cannot play on the opponent store
+            } else if (!(boardHouses.get(position).getHouseType().equals(HouseType.STORE)
+                    && boardHouses.get(position).getPlayer() != currentPlayer)) {
                 incSeeds(position, 1);
                 --numberOfStones;
             }
@@ -212,6 +214,9 @@ public class StrategyImpl implements Strategy {
 
         if(board.get(position).getHouseType().equals(HouseType.STORE))
             throw new StrategyException("The player stores cannot be played");
+
+        if(board.get(position).getSeeds() == 0)
+            throw new StrategyException("Houses without seeds cannot be played");
     }
 
     /**
