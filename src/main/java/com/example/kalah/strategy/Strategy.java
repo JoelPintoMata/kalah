@@ -1,6 +1,5 @@
 package com.example.kalah.strategy;
 
-import com.example.kalah.model.board.BoardException;
 import com.example.kalah.model.house.House;
 import com.example.kalah.model.player.Player;
 
@@ -18,8 +17,9 @@ public interface Strategy {
      * Performs a play on a board following a specific strategy
      * @param playerId the player id
      * @param position the start position
+     * @throws StrategyException if the play is invalid
      */
-    void play(int playerId, int position) throws BoardException;
+    void play(int playerId, int position) throws StrategyException;
 
     /**
      * Gets this strategy board list of houses

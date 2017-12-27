@@ -29,7 +29,7 @@
                 <span th:if="${winner != null}" th:text="'Winner: ' + ${winner.id}"></span>
             </h2>
             <h3>
-                <span th:if="${winner == null}" th:text="'Next player: ' + ${player.id}"></span>
+                <span th:if="${winner == null} and ${player != null}" th:text="'Next player: ' + ${player.id}"></span>
             </h3>
             <table>
                 <tr>

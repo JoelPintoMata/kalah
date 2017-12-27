@@ -15,7 +15,7 @@ public class House {
     private final HouseType houseType;
     @Getter
     private final Player player;
-    @Getter @Setter
+    @Getter@Setter
     private int seeds;
 
     public House(int id, HouseType houseType, int seedsPerPlayer, Player player) {
@@ -23,5 +23,13 @@ public class House {
         this.houseType = houseType;
         this.player = player;
         this.seeds = seedsPerPlayer;
+    }
+
+    /**
+     * Adds a number of seeds to this house
+     * @param seeds the number of seeds to add
+     */
+    public void addSeeds(int seeds) {
+        this.seeds = this.seeds + seeds;
     }
 }

@@ -30,7 +30,7 @@ public class StrategyImpl implements Strategy {
     private WinningPlayerComparator winningPlayerComparator;
 
 //    the number of initial seeds per player
-    private static final int SEEDS_PER_PLAYER = 4;
+    private static final int SEEDS_PER_PLAYER = 6;
 
     private Player currentPlayer;
     private Player winner;
@@ -48,7 +48,7 @@ public class StrategyImpl implements Strategy {
     }
 
     @Override
-    public void play(int playerId, int position) throws BoardException {
+    public void play(int playerId, int position) throws StrategyException {
 //        player list index is zero based
         currentPlayer = players.getPlayerById(playerId);
 
@@ -111,11 +111,28 @@ public class StrategyImpl implements Strategy {
                 --numberOfStones;
             }
             if(isGameWon()) {
+                captureAllSeeds(players.getNext(currentPlayer));
                 winner = winningPlayer();
                 nextPlayer = null;
             } else if(!isPlayFinished)
                 position = nextPosition(position);
         } while (!isPlayFinished);
+    }
+
+    /**
+     * Captures all player seeds
+     * @param player the player to capture the seeds
+     */
+    private void captureAllSeeds(Player player) {
+        List<House> playerHouses = this.board.getHouses().stream()
+                .filter(x -> x.getPlayer().getId() == player.getId()
+                && x.getHouseType().equals(HouseType.HOUSE))
+                .collect(Collectors.toList());
+
+        playerHouses.stream().forEach(x -> {
+            board.getStore(player).addSeeds(x.getSeeds());
+            x.setSeeds(0);
+        });
     }
 
     /**
@@ -125,11 +142,11 @@ public class StrategyImpl implements Strategy {
      */
     private void incSeeds(int position, int seeds) {
         House house = board.getHouses().get(position);
-        house.setSeeds(house.getSeeds() + seeds);
+        house.addSeeds(seeds);
     }
 
     /**
-     * Gets this game winning player
+     * Gets this game winning player, that is, the player with more seeds in his house
      * @return this game winning player
      */
     private Player winningPlayer() {
@@ -182,19 +199,19 @@ public class StrategyImpl implements Strategy {
     /**
      * Validates this play
      * @param position the position
-     * @throws BoardException if the play is invalid
+     * @throws StrategyException if the play is invalid
      */
-    private void isPlayValid(int position) throws BoardException {
+    private void isPlayValid(int position) throws StrategyException {
         List<House> board = this.board.getHouses();
 
         if(currentPlayer != nextPlayer)
-            throw new BoardException("Un-expected player");
+            throw new StrategyException("Un-expected player");
 
         if(currentPlayer != board.get(position).getPlayer())
-            throw new BoardException("The player can only play on his side of the board");
+            throw new StrategyException("The player can only play on his side of the board");
 
         if(board.get(position).getHouseType().equals(HouseType.STORE))
-            throw new BoardException("The player stores cannot be played");
+            throw new StrategyException("The player stores cannot be played");
     }
 
     /**

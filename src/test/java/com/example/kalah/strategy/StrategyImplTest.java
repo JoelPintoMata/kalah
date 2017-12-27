@@ -34,7 +34,7 @@ public class StrategyImplTest {
     }
 
     @Test
-    public void play() throws BoardException{
+    public void play() throws StrategyException{
 
 //        capture rules work
         strategy.setup(6);

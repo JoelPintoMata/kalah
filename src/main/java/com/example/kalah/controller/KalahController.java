@@ -5,6 +5,7 @@ import com.example.kalah.model.board.Board;
 import com.example.kalah.model.board.BoardException;
 import com.example.kalah.model.house.House;
 import com.example.kalah.model.player.Player;
+import com.example.kalah.strategy.StrategyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -88,13 +89,18 @@ public class KalahController {
             @PathVariable("position") int position,
             Model model) {
 
+        List<House> boardHouses;
         try {
             kalah.play(playerId, position);
+
         } catch (BoardException e) {
+            model.addAttribute("message", e.getMessage());
+            return "play";
+        } catch (StrategyException e) {
             model.addAttribute("message", e.getMessage());
         }
 
-        List<House> boardHouses = kalah.getBoardHouses();
+        boardHouses = kalah.getBoardHouses();
         Player player = kalah.getNextPlayer();
         Player winner = kalah.getWinner();
 

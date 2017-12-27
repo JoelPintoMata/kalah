@@ -70,6 +70,6 @@ public class BoardImpl implements Board {
     public void captureSeeds(Player player, int seeds) {
         int PlayerStorePosition = stores.get(Integer.valueOf(player.getId()));
         House house = houses.get(PlayerStorePosition);
-        house.setSeeds(house.getSeeds() + seeds);
+        house.addSeeds(seeds);
     }
 }
