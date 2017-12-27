@@ -1,3 +1,5 @@
+[![codebeat badge](https://codebeat.co/badges/17353089-e3c5-450b-af04-a98cfcb40b0c)](https://codebeat.co/projects/github-com-joelpintomata-kalah-master)    [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dc47c0939f5642d1ac406d16bfd61359)](https://www.codacy.com/app/joelmatacv/kalah?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=JoelPintoMata/kalah&amp;utm_campaign=Badge_Grade)
+
 # kalah
 Kalah game implementation (2 human players, no AI)
 
