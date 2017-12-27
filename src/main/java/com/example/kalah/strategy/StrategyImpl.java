@@ -71,7 +71,7 @@ public class StrategyImpl implements Strategy {
 
     /**
      * Executes a play
-     * @param position the position
+     * @param position the current position
      */
     private void playAux(int position) {
         List<House> boardHouses = this.board.getHouses();
@@ -84,7 +84,7 @@ public class StrategyImpl implements Strategy {
         boolean isPlayFinished = false;
         do {
             if (numberOfStones == 1) {
-                processPlayLastSeed();
+                processPlayLastSeed(position);
                 isPlayFinished = true;
 //            we cannot play on the opponent store
             } else if (!(boardHouses.get(position).getHouseType().equals(HouseType.STORE)
@@ -110,8 +110,9 @@ public class StrategyImpl implements Strategy {
 
     /**
      * Processes the play of the last seed
+     * @param position the current position
      */
-    private void processPlayLastSeed() {
+    private void processPlayLastSeed(int position) {
         List<House> boardHouses = this.board.getHouses();
         if (boardHouses.get(position).getHouseType().equals(HouseType.STORE)) {
 //                        the current player wins one more play
@@ -149,7 +150,7 @@ public class StrategyImpl implements Strategy {
 
     /**
      * Increments the number of seeds in a house
-     * @param position the position
+     * @param position the current position
      * @param seeds the number of seeds to increment
      */
     private void incSeeds(int position, int seeds) {
@@ -188,7 +189,7 @@ public class StrategyImpl implements Strategy {
      *  1) retrieves the seeds in the opposite position house
      *  2) resets the opposite position house number of seeds
      *  3) adds the opponents seeds to the current position player house
-     * @param position the position
+     * @param position the current position
      */
     private void captureOponentSeeds(int position) {
         int opponentPosition = (board.getHouses().size() - 1) - position;
@@ -209,7 +210,7 @@ public class StrategyImpl implements Strategy {
 
     /**
      * Validates this play
-     * @param position the position
+     * @param position the current position
      * @throws StrategyException if the play is invalid
      */
     private void isPlayValid(int position) throws StrategyException {

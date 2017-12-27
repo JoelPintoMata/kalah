@@ -94,7 +94,7 @@ public class StrategyImplTest {
     @Test
     public void getFirstPlayer() {
         strategy.setup(6);
-        Assert.assertNotNull(strategy.getFirstPlayer());
+        Assert.assertNotNull(strategy.getNextPlayer());
     }
 
     @Test
