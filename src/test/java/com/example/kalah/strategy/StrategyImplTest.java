@@ -1,7 +1,6 @@
 package com.example.kalah.strategy;
 
-import com.example.kalah.KalahApplication;
-import com.example.kalah.model.board.BoardException;
+import com.example.kalah.Main;
 import com.example.kalah.model.house.House;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +13,7 @@ import java.util.List;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = KalahApplication.class)
+@SpringBootTest(classes = Main.class)
 public class StrategyImplTest {
 
     @Autowired

@@ -24,7 +24,7 @@ A player performs a plays on a given position | http://<host>:<server port>/play
 
 ## Usage
 ```
-mvn spring-boot:run
+mvn clean spring-boot:run
 ```
 
 ## Test

@@ -1,6 +1,6 @@
 package com.example.kalah.controller;
 
-import com.example.kalah.board.Kalah;
+import com.example.kalah.Kalah;
 import com.example.kalah.model.board.Board;
 import com.example.kalah.model.board.BoardException;
 import com.example.kalah.model.house.House;
@@ -102,7 +102,7 @@ public class KalahController {
 
         boardHouses = kalah.getBoardHouses();
         Player player = kalah.getNextPlayer();
-        Player winner = kalah.getWinner();
+        Player winner = kalah.getWinPlayer();
 
         model.addAttribute("boardHouses", boardHouses);
         List<House> boardHousesToReverse = boardHouses.stream().map(house -> new House(house.getId(), house.getHouseType(), house.getSeeds(), house.getPlayer()))

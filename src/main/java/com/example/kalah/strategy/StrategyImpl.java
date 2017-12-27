@@ -69,7 +69,7 @@ public class StrategyImpl implements Strategy {
     }
 
     @Override
-    public Player getWinner() {
+    public Player getWinPlayer() {
         return this.winner;
     }
 

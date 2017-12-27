@@ -10,11 +10,4 @@ public class Player {
 
     @Setter@Getter
     private int id;
-
-    @Getter
-    private int seedsCaptured;
-
-    public void incSeedsCaptured(){
-        this.seedsCaptured++;
-    }
 }

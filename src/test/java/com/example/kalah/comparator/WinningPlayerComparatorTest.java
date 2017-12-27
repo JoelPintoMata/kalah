@@ -1,6 +1,6 @@
 package com.example.kalah.comparator;
 
-import com.example.kalah.KalahApplication;
+import com.example.kalah.Main;
 import com.example.kalah.model.house.House;
 import com.example.kalah.model.house.HouseType;
 import com.example.kalah.model.player.Player;
@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = KalahApplication.class)
+@SpringBootTest(classes = Main.class)
 public class WinningPlayerComparatorTest {
 
     @Autowired

@@ -31,7 +31,7 @@ public interface Strategy {
      * Gets the winning player
      * @return the winning player
      */
-    Player getWinner();
+    Player getWinPlayer();
 
     /**
      * Gets the first player

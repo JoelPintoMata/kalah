@@ -1,4 +1,4 @@
-package com.example.kalah.board;
+package com.example.kalah;
 
 
 import com.example.kalah.model.board.BoardException;
@@ -73,8 +73,8 @@ public class Kalah {
      * Gets the winning player
      * @return the winning player
      */
-    public Player getWinner() {
-        return strategy.getWinner();
+    public Player getWinPlayer() {
+        return strategy.getWinPlayer();
     }
 
     /**

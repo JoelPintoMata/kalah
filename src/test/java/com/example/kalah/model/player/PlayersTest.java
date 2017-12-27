@@ -1,6 +1,6 @@
 package com.example.kalah.model.player;
 
-import com.example.kalah.KalahApplication;
+import com.example.kalah.Main;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = KalahApplication.class)
+@SpringBootTest(classes = Main.class)
 public class PlayersTest {
 
     @Autowired
