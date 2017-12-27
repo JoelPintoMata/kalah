@@ -39,47 +39,23 @@ public class StrategyImplTest {
 //        capture rules work
         strategy.setup(6);
         List<House> houseList = strategy.getBoardHouses();
+        houseList.get(3).setSeeds(1);
         houseList.get(4).setSeeds(0);
-        houseList.get(5).setSeeds(5);
-        houseList.get(6).setSeeds(1);
+        houseList.get(5).setSeeds(3);
+        houseList.get(6).setSeeds(4);
         houseList.get(7).setSeeds(0);
-        houseList.get(8).setSeeds(6);
-        houseList.get(9).setSeeds(5);
-        houseList.get(10).setSeeds(5);
-        houseList.get(11).setSeeds(5);
-        houseList.get(12).setSeeds(5);
-        houseList.get(13).setSeeds(0);
-        strategy.play(houseList.get(0).getPlayer().getId(), 0);
+        houseList.get(8).setSeeds(13);
+        houseList.get(9).setSeeds(10);
+        houseList.get(10).setSeeds(9);
+        houseList.get(11).setSeeds(9);
+        houseList.get(12).setSeeds(8);
+        houseList.get(13).setSeeds(1);
+        strategy.play(houseList.get(0).getPlayer().getId(), 3);
 
-        Assert.assertEquals(houseList.get(0).getSeeds(), 0);
         Assert.assertEquals(houseList.get(4).getSeeds(), 0);
         Assert.assertEquals(houseList.get(9).getSeeds(), 0);
 
-        Assert.assertEquals(houseList.get(6).getSeeds(), 7);
-        strategy.setup(6);
-        houseList = strategy.getBoardHouses();
-        strategy.play(houseList.get(0).getPlayer().getId(), 0);
-        houseList.get(0).setSeeds(0);
-        houseList.get(1).setSeeds(7);
-        houseList.get(2).setSeeds(5);
-        houseList.get(3).setSeeds(5);
-        houseList.get(4).setSeeds(5);
-        houseList.get(5).setSeeds(4);
-        houseList.get(6).setSeeds(0);
-        houseList.get(7).setSeeds(4);
-        houseList.get(8).setSeeds(4);
-        houseList.get(9).setSeeds(4);
-        houseList.get(10).setSeeds(4);
-        houseList.get(11).setSeeds(0);
-        houseList.get(12).setSeeds(5);
-        houseList.get(13).setSeeds(1);
-        strategy.play(houseList.get(7).getPlayer().getId(), 7);
-
-        Assert.assertEquals(houseList.get(2).getSeeds(), 0);
-        Assert.assertEquals(houseList.get(7).getSeeds(), 0);
-        Assert.assertEquals(houseList.get(11).getSeeds(), 0);
-
-        Assert.assertEquals(houseList.get(13).getSeeds(), 7);
+        Assert.assertEquals(houseList.get(6).getSeeds(), 15);
     }
 
     @Test
