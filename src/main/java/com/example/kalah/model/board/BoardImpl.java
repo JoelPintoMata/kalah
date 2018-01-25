@@ -6,6 +6,7 @@ import com.example.kalah.model.player.Player;
 import com.example.kalah.model.player.Players;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,6 +17,7 @@ import java.util.Map;
  * A game board concrete implementation class
  */
 @Component
+@SessionScope
 public class BoardImpl implements Board {
 
     @Autowired

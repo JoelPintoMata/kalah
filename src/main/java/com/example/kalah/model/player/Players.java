@@ -1,6 +1,7 @@
 package com.example.kalah.model.player;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
  * Players implementation class
  */
 @Component
+@SessionScope
 public class Players {
 
     private List<Player> playerList;

@@ -8,6 +8,7 @@ import com.example.kalah.model.player.Player;
 import com.example.kalah.model.player.Players;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
  * This implementation follows the default rules at [Kalah default rules](https://en.wikipedia.org/wiki/Kalah)
  */
 @Component
+@SessionScope
 public class StrategyImpl implements Strategy {
 
     @Autowired

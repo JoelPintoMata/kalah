@@ -22,9 +22,6 @@ public class KalahController {
     @Autowired
     private Kalah kalah;
 
-    @Autowired
-    private Board board;
-
     @RequestMapping(method = RequestMethod.GET, path="/setup")
     public String setupDefaultLeveStrategy(
             Model model) {
@@ -62,6 +59,7 @@ public class KalahController {
             Model model) {
 
         boolean isLoadModel = true;
+        System.out.println(kalah.toString());
         try {
             kalah.play(playerId, position);
 
