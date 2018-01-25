@@ -1,6 +1,6 @@
 package com.example.kalah.strategy;
 
-public class StrategyException extends Throwable {
+public class StrategyException extends Exception {
 
     /**
      *
