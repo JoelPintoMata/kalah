@@ -53,7 +53,7 @@ public class StrategyImpl implements Strategy {
 //        player list index is zero based
         currentPlayer = players.getPlayerById(playerId);
 
-        isPlayValid(position);
+        checkPlayValid(position);
 
         playAux(position);
     }
@@ -215,7 +215,7 @@ public class StrategyImpl implements Strategy {
      * @param position the current position
      * @throws StrategyException if the play is invalid
      */
-    private void isPlayValid(int position) throws StrategyException {
+    private void checkPlayValid(int position) throws StrategyException {
 
         if(currentPlayer != nextPlayer)
             throw new StrategyException("Un-expected player");
