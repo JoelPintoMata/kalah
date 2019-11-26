@@ -30,7 +30,6 @@ public class BoardImpl implements Board {
 
     @Override
     public void setup(int level, int seedsPerPlayer) {
-
         houses = new LinkedList<>();
         stores = new HashMap();
 
